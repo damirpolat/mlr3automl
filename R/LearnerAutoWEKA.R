@@ -16,18 +16,19 @@ LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
    initialize = function(task) {
      assert_task(task)
      self$task = task
+     task_type = task$task_type
      
-     learner_names = learners_default[[task$task_type]]
+     learner_names = paste(task_type, learners_default, sep = ".")
      learners = lrns(learner_names)
      
      graph = ppl("branch", lapply(learners, po))
      graph = ppl("robustify", task = task, factors_to_numeric = TRUE) %>>% graph
      self$graph_learner = as_learner(graph)
      self$graph_learner$id = "graph_learner"
-     search_space = default_space(learner_names)
+     search_space = default_space(learners_default, task_type)
      
      resampling = rsmp("cv", folds = 3)
-     measure = msr("classif.ce")
+     measure = msr(measures_default[[task_type]])
      terminator = trm("evals", n_evals = 5)
      
      instance = ti(
