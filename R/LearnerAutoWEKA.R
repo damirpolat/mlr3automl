@@ -3,8 +3,25 @@
 #' @include LearnerAutoWEKA.R
 #'
 #' @description
-#' Auto-WEKA learner.
+#' Class for Auto-WEKA like learner in mlr3automl.
+#' The original Auto-WEKA system performed model based optimization using random forest learner
+#' as basis for a surrogate model.
 #'
+#' @param task ([`Task`][mlr3::Task]) \cr
+#' [`Task`][mlr3::Task] for learning.
+#' 
+#' @examples
+#' \dontrun{
+#' library(mlr3)
+#' library(mlr3automl)
+#'
+#' classif_model = LearnerAutoWEKA(tsk("iris"))
+#' classif_model$train()
+#' 
+#' regr_model = LearnerAutoWEKA(tsk("mtcars"))
+#' regr_model$train()
+#' }
+#' 
 #' @export
 LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
   public = list(
