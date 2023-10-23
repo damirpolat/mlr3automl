@@ -32,7 +32,7 @@ LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
    terminator = NULL,
    #' @description
    #' Creates a new instance of this class.
-   initialize = function(task, metric, runtime_limit = 30L) {
+   initialize = function(task, metric, terminator) {
      assert_task(task)
      self$task = task
      task_type = task$task_type
@@ -48,7 +48,7 @@ LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
      
      resampling = rsmp("cv", folds = 3)
      self$measure = msr(metric)
-     self$terminator = trm("run_time", secs = runtime_limit)
+     self$terminator = terminator
      
      instance = ti(
        task = self$task,
