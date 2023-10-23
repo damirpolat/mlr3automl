@@ -107,7 +107,3 @@ learner_tokens = list(
     'xgboost.subsample' = to_tune(1e-01, 1)
   )
 )
-measures_default = list(
-  'classif' = 'classif.ce',
-  'regr' = 'regr.rmse'
-)

@@ -21,16 +21,17 @@
 #' regr_model = LearnerAutoWEKA(tsk("mtcars"))
 #' regr_model$train()
 #' }
-#' 
+#' @importFrom R6 R6Class
 #' @export
 LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
   public = list(
    task = NULL,
    graph_learner = NULL,
    at = NULL,
+   measure = NULL,
    #' @description
-   #' Creates a new instance of this [R6][R6::R6Class] class.
-   initialize = function(task) {
+   #' Creates a new instance of this class.
+   initialize = function(task, metric) {
      assert_task(task)
      self$task = task
      task_type = task$task_type
@@ -45,14 +46,14 @@ LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
      search_space = default_space(learners_default, task_type)
      
      resampling = rsmp("cv", folds = 3)
-     measure = msr(measures_default[[task_type]])
+     self$measure = msr(metric)
      terminator = trm("evals", n_evals = 5)
      
      instance = ti(
        task = self$task,
        learner = self$graph_learner,
        resampling = resampling,
-       measure = measure,
+       measure = self$measure,
        terminator = terminator,
        search_space = search_space
      )
@@ -70,7 +71,7 @@ LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
        tuner = tuner,
        learner = self$graph_learner,
        resampling = resampling,
-       measure = measure,
+       measure = self$measure,
        terminator = terminator,
        search_space = search_space
      )
