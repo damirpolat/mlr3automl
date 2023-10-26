@@ -37,6 +37,10 @@ LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
      self$task = task
      task_type = task$task_type
      
+     resampling = rsmp("cv", folds = 3)
+     self$measure = msr(metric)
+     self$terminator = terminator
+     
      learner_names = paste(task_type, learners_default, sep = ".")
      learners = lrns(learner_names)
      
@@ -44,11 +48,8 @@ LearnerAutoWEKA = R6Class("LearnerAutoWEKA",
      graph = ppl("robustify", task = task, factors_to_numeric = TRUE) %>>% graph
      self$graph_learner = as_learner(graph)
      self$graph_learner$id = "graph_learner"
+     self$graph_learner$predict_type = self$measure$predict_type
      search_space = default_space(learners_default, task_type)
-     
-     resampling = rsmp("cv", folds = 3)
-     self$measure = msr(metric)
-     self$terminator = terminator
      
      instance = ti(
        task = self$task,
